@@ -14,10 +14,10 @@ $ source setup.sh
 # 実行方法
 
 ```
-cd modube_animation
-source activate_venv.sh  # setup.sh実行した人のみ
-cd scripts
-python3 main.py  # source launch.shでも可
+$ cd modube_animation
+$ source activate_venv.sh  # setup.sh実行した人のみ
+$ cd scripts
+$ python3 main.py  # source launch.shでも可
 ```
 
 うまく実行できるとこんな感じの画面になります
