@@ -12,6 +12,7 @@ import pyvista as pv
 import time
 import threading
 import sys
+from func import *
 
 
 MAX_STATES_NUM = 100
@@ -28,57 +29,6 @@ cmds = []
 source = ""
 recording = False
 moves = []
-
-funcs = {
-    "1dconveyor": [
-        "move 6 10 8 12 6 14 0 0 1",
-        "move 6 10 8 12 14 15 4 0 0",
-        "move 10 14 8 12 6 7 -4 0 0",
-        "move 10 14 8 12 7 15 0 0 -1",
-        "func 1dconveyor"  # 最後に自分自身を実行すると無限ループになる
-    ][::-1],
-    "trans": [
-        "set 6 7 6 14 6 14 0 0 1",
-        "set 8 9 6 14 6 14 0 0 1",
-        "set 10 11 6 14 6 14 0 0 1",
-        "set 12 13 6 14 6 14 0 0 1",
-        "exec",
-        "func trans_loop"
-    ][::-1],
-    "trans_loop": [
-        "set 6 14 6 14 14 15 1 0 0",
-        "set 6 14 6 14 6 7 -1 0 0",
-        "exec",
-        "set 7 13 6 14 14 15 1 0 0",
-        "set 7 13 6 14 6 7 -1 0 0",
-        "set 13 14 6 14 7 15 0 0 -1",
-        "set 6 7 6 14 6 14 0 0 1",
-        "exec",
-        "func trans_loop"
-    ][::-1],
-    "3dconveyor1": [
-        "move 6 10 8 12 6 14 0 0 1",
-        "move 6 10 8 12 14 15 4 0 0",
-        "move 10 14 8 12 6 15 0 0 5",
-        "move 12 14 9 11 11 20 0 0 5",
-        "delay 1",
-        "move 12 14 9 11 16 25 0 0 -5",
-        "move 10 14 8 12 11 20 0 0 -5",
-        "move 10 14 8 12 6 7 -4 0 0",
-        "move 10 14 8 12 7 15 0 0 -1",
-        "func 3dconveyor1"
-    ][::-1],
-    "z_exceed": [
-        "move 7 13 7 13 6 14 0 0 7",
-        "move 8 12 8 12 13 21 0 0 7",
-        "move 9 11 9 11 20 28 0 0 7",
-        "delay 1",
-        "move 9 11 9 11 27 35 0 0 -7",
-        "move 8 12 8 12 21 28 0 0 -7",
-        "move 7 13 7 13 14 21 0 0 -7",
-        "func z_exceed",
-    ][::-1]
-}
 
 
 # 初期化処理
@@ -151,7 +101,7 @@ def move():
     finished = False
     moves_ = []
     while moves:
-        moves_.append(moves.pop)
+        moves_.append(moves.pop(0))
     while not finished:
         finished = True
         for mov in moves_:
