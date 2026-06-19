@@ -15,10 +15,9 @@ import sys
 
 
 MAX_STATES_NUM = 100
-SIZE = 20
 dt = 0.1
 
-state = np.zeros((SIZE, SIZE, SIZE), dtype=bool)
+state = np.zeros((30, 30, 100), dtype=bool)
 init_state = state
 states = []
 plotter = pv.Plotter()
@@ -56,6 +55,28 @@ funcs = {
         "set 6 7 6 14 6 14 0 0 1",
         "exec",
         "func trans_loop"
+    ][::-1],
+    "3dconveyor1": [
+        "move 6 10 8 12 6 14 0 0 1",
+        "move 6 10 8 12 14 15 4 0 0",
+        "move 10 14 8 12 6 15 0 0 5",
+        "move 12 14 9 11 11 20 0 0 5",
+        "delay 1",
+        "move 12 14 9 11 16 25 0 0 -5",
+        "move 10 14 8 12 11 20 0 0 -5",
+        "move 10 14 8 12 6 7 -4 0 0",
+        "move 10 14 8 12 7 15 0 0 -1",
+        "func 3dconveyor1"
+    ][::-1],
+    "z_exceed": [
+        "move 7 13 7 13 6 14 0 0 7",
+        "move 8 12 8 12 13 21 0 0 7",
+        "move 9 11 9 11 20 28 0 0 7",
+        "delay 1",
+        "move 9 11 9 11 27 35 0 0 -7",
+        "move 8 12 8 12 21 28 0 0 -7",
+        "move 7 13 7 13 14 21 0 0 -7",
+        "func z_exceed",
     ][::-1]
 }
 
@@ -130,7 +151,7 @@ def move():
     finished = False
     moves_ = []
     while moves:
-        moves_.append(moves.pop())
+        moves_.append(moves.pop)
     while not finished:
         finished = True
         for mov in moves_:
@@ -161,6 +182,12 @@ def undo():
     states.append(state)
     show_states()
     
+
+# 数秒まつframeをつくる
+def delay(duration):
+    for _ in range(int(duration / dt)):
+        states.append(state)
+    show_states()
 
 # コマンドを受信するだけ
 def receive_cmd():
@@ -231,6 +258,12 @@ def handle_cmd():
             cmds = []
         if cmd_args[0] == "source":
             print(f"\n{source}")
+        if cmd_args[0] == "delay":
+            if len(cmd_args) <= 1:
+                print("[delay] invalid args. usage: delay [time]")
+                return
+            delay(float(cmd_args[1]))
+            
 
 
 # statesの容量が無限に増え続けないようにする
@@ -241,7 +274,7 @@ def manage_states_num():
         return
     n = len(states) - MAX_STATES_NUM
     del states[:n-1]
-    progress -= n - 1
+    progress = np.max(progress - n + 1, 0)
     
 
 # main
@@ -249,8 +282,7 @@ def main():
     global plotter
     global cmds
     init()
-    cmds.append("func trans")
-    input("enter to start: ")
+    # cmds.append("func 3dconveyor1")
     threading.Thread(target=receive_cmd, daemon=True).start()
     while True:
         handle_cmd()
