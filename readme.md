@@ -21,7 +21,7 @@ python3 main.py  # source launch.shでも可
 ```
 
 うまく実行できるとこんな感じの画面になります
-![alt text](figures/image.png)
+<img width="1858" height="956" alt="image" src="https://github.com/user-attachments/assets/4071c742-6a2b-467e-a344-6b2b22007886" />
 
 プログラムは対話的に動かしていきます。実行しただけではただの8x8x8のキューブが表示されるだけです。最初の状態では、6<=x<=14, 6<=y<=14, 6<=z<=14の領域がキューブで満たされています。以下が関数です。`[]`は引数であることを表しますが、実際に実行するときには不要です。
 
@@ -58,4 +58,7 @@ python3 main.py  # source launch.shでも可
 # 実行例
 
 例えばこのような動画を作ることができます。
+
+https://github.com/user-attachments/assets/c6ec21a9-1133-4570-8584-a7de2ff88e51
+
 
